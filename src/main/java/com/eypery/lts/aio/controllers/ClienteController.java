@@ -1,12 +1,16 @@
 package com.eypery.lts.aio.controllers;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,13 +19,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.eypery.lts.aio.entities.Cliente;
+import com.eypery.lts.aio.entities.Usuario;
 import com.eypery.lts.aio.exceptions.ClienteExistsException;
 import com.eypery.lts.aio.exceptions.ClienteNotFoundException;
 import com.eypery.lts.aio.services.ClienteService;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 
 @RestController
 @Validated
@@ -78,6 +87,29 @@ public class ClienteController {
 		}
 
 		return cliente;
+	}
+
+	@PostMapping("/login")
+	public Usuario login(@RequestBody Usuario usuario) {
+
+		String token = getJWTToken(usuario.getUsername());
+		usuario.setToken(token);
+		return usuario;
+
+	}
+
+	private String getJWTToken(String username) {
+		String secretKey = "mySecretKey";
+		List<GrantedAuthority> grantedAuthorities = AuthorityUtils.commaSeparatedStringToAuthorityList("ADMIN,SUPER-ADMIN");
+
+		String token = Jwts.builder().setId("softtekJWT").setSubject(username)
+				.claim("authorities",
+						grantedAuthorities.stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
+				.setIssuedAt(new Date(System.currentTimeMillis()))
+				.setExpiration(new Date(System.currentTimeMillis() + 600000))
+				.signWith(SignatureAlgorithm.HS512, secretKey.getBytes()).compact();
+
+		return "Bearer " + token;
 	}
 
 }
