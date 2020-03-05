@@ -18,7 +18,7 @@ public class AioApplication {
 		SpringApplication.run(AioApplication.class, args);
 	}
 
-	@EnableWebSecurity
+	@EnableWebSecurity //Jwt
 	@Configuration
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
