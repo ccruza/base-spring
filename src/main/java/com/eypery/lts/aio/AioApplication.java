@@ -18,7 +18,7 @@ public class AioApplication {
 		SpringApplication.run(AioApplication.class, args);
 	}
 
-	@EnableWebSecurity //Jwt
+	@EnableWebSecurity // Jwt
 	@Configuration
 	class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -28,6 +28,7 @@ public class AioApplication {
 					.addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
 					.authorizeRequests().antMatchers(HttpMethod.POST, "/cliente/login").permitAll().anyRequest()
 					.authenticated();
+			http.cors();
 		}
 	}
 }
