@@ -45,5 +45,14 @@
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/pp487ev/.m2/repository/io/springfox/springfox-bean-validators/2.9.2/springfox-bean-validators-2.9.2.jar" sourcepath="/home/pp487ev/.m2/repository/io/springfox/springfox-bean-validators/2.9.2/springfox-bean-validators-2.9.2-sources.jar">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="maven.groupId" value="io.springfox"/>
+			<attribute name="maven.artifactId" value="springfox-bean-validators"/>
+			<attribute name="maven.version" value="2.9.2"/>
+			<attribute name="maven.scope" value="compile"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
